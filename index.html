@@ -159,8 +159,8 @@
         list.map((obj) => {
             const {x, h, progressiveResult, regressiveResult, centeredFunction} = obj;
             data.push({
-                x: x,
-                y: progressiveResult
+                x: progressiveResult,
+                y: x
             });
         })
         const ctx = document.getElementById('myChart');
