@@ -51,8 +51,6 @@
                     <div class="fw-bolder h5" id="resultFormula"></div>
 
                     <div class="fw-bolder h5" id="xhiSolvedR"></div>
-
-
                     <div class="fw-bolder h5" id="resultFormula2"></div>
 
 
@@ -105,7 +103,7 @@
 
         const xhiSolved = parseFloat(h) + parseFloat(x);
 
-
+        
         const xhiSolvedR = parseFloat(x) - parseFloat(h);
 
 
@@ -115,9 +113,10 @@
         let derivativeByH = parsedFunctionX.evaluate({x});
         let resultFormula = (derivativeByXhi - derivativeByH) / h;
 
-        let resultFormula2 = (derivativeByXhi - (derivativeByXhi2)) / h;
-
         let derivativeByXhi2 = parsedFunctionX.evaluate({x: xhiSolvedR});
+
+
+        let resultFormula2 = (derivativeByH-derivativeByXhi2)/h;
 
 
         //Valor de los input
@@ -125,23 +124,32 @@
         const derivativeExpression = document.getElementById('derivative-expression');
         const derivativeSolved = document.getElementById('derivative-solved');
         const resultFormulaDiv = document.getElementById('resultFormula');
+        
+        const resultFormulaDiv3 = document.getElementById('resultFormula2');
+
+
+
         const xhi = document.getElementById('xhi');
 
 
         const resultFormulaDiv2 = document.getElementById('xhiSolvedR');
 
+
+        
+
         //Diferencias regresivas
         //OutPut: Los resultados que se muestran en pantalla
         
         derivativeExpression.textContent = "Derivada: " + derivation.toString();
-        derivativeSolved.textContent = "Derivada sustituida: " + derivation.evaluate({x});
-        xhi.textContent = "Xi+1: " + xhiSolved;
+        // derivativeSolved.textContent = "Derivada sustituida: " + derivation.evaluate({x});
+        // xhi.textContent = "Xi+1: " + xhiSolved;
         resultFormulaDiv.textContent = "Diferencias progresivas: " + resultFormula.toString();
 
+        
+        //  resultFormulaDiv2.textContent = "Ress: " + derivativeByXhi2.toString();
 
 
-         resultFormulaDiv2.textContent = "Ress: " + derivativeByXhi2.toString();
-
+         resultFormulaDiv3.textContent = "Diferencias Regresivas: " + resultFormula2.toString();
 
      
        
