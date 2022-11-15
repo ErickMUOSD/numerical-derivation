@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Derivar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <script src="js/math.js"></script>
     <script src="https://polyfill.io/v3/po  lyfill.min.js?features=es6"></script>
@@ -27,19 +28,53 @@
                 <h1 class="h1">Derivación númerica</h1>
                 <h1 class="h1 my-1 text-center"></h1>
                 <div class=" justify-content-start ">
-                    <div class="row">
+                    <!--                    <div class="row">-->
 
-                        <input  type="number" class="col my-4 m-1 form-control form-control-lg " id="derivate-h1"
-                               placeholder="rango min de h" autocomplete="off">
+                    <input type="number" class="col my-4 form-control form-control-lg " id="derivative-h1"
+                           placeholder="rango min de h" autocomplete="off">
 
-                        <input type="number" class="col my-4 m-1 form-control form-control-lg " id="derivate-h2"
-                               placeholder="rango max de h" autocomplete="off">
-                    </div>
-                    <input type="text" class=" my-4  form-control form-control-lg " id="derivate-x"
+                    <!--                        <input type="number" class="col my-4 m-1 form-control form-control-lg " id="derivate-h2"-->
+                    <!--                               placeholder="rango max de h" autocomplete="off">-->
+                    <!--                    </div>-->
+                    <input type="number" class=" my-4  form-control form-control-lg " id="derivative-x"
                            placeholder="Introduce la derivada x" autocomplete="off">
-                    <input type="text" class=" my-4  form-control form-control-lg " id="function-x"
+                    <input type="text" class=" my-4  form-control form-control-lg " id="function"
                            placeholder="Introduce la función aquí" autocomplete="off">
-                    <div class="fw-bolder text-xl-center" id="result-derivate"></div>
+                    <div class="fw-bolder " id="derivative-expression"></div>
+                    <div class="fw-bolder " id="derivative-solved"></div>
+                    <div class="fw-bolder" id="xhi"></div>
+                    <!--                    <div class="table-responsive">-->
+                    <!--                        <table class="   table table-borderless ">-->
+                    <!--                            <thead>-->
+                    <!--                            <tr>-->
+                    <!--                                <th scope="col">H</th>-->
+                    <!--                                <th scope="col">X</th>-->
+                    <!--                                <th scope="col">Resultado</th>-->
+
+                    <!--                            </tr>-->
+                    <!--                            </thead>-->
+                    <!--                            <tbody id="content-group">-->
+                    <!--                            <tr id="element-group" >-->
+                    <!--                                <th scope="row">-->
+                    <!--                                    <input class="form-control h-input" type="number">-->
+                    <!--                                </th>-->
+                    <!--                                <td>-->
+                    <!--                                    <input class="form-control x-input" type="number"></td>-->
+                    <!--                                <td>-->
+                    <!--                                     <h4  class="output-1">0.8</h4>-->
+                    <!--                                </td>-->
+                    <!--                                <td>-->
+                    <!--                                    <button type="button" class="btn btn-success" onclick="addInput()">Añadir</button>-->
+
+                    <!--                                </td>-->
+
+                    <!--                            </tr>-->
+
+                    <!--                            </tbody>-->
+                    <!--                        </table>-->
+                    <!--                    </div>-->
+
+                    <div class="fw-bolder h5" id="resultFormula"></div>
                     <button type="button" class=" btn btn-primary my-3 text-center "
                             onclick="calculateResult()">Calcular
                     </button>
@@ -50,54 +85,57 @@
         </div>
 
     </div>
-
-
 </div>
-
-<!-- <ul class="list-group">
-    <li class="list-group-item">Derivada
-
-    </li>
-    <li class="list-group-item">Derivada</li>
-    <li class="list-group-item">Derivada</li>
-
-</ul> -->
-
-<!--
-<div class="row d-flex justify-content-center">
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Resultado</h5>
-        </div>
-        <div class="card-body">
-
-        </div>
-    </div>
-
-</div> -->
-
-
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
 <!--<script src="js/index.js"></script>-->
 <script>
 
+    // function addInput() {
+    //     const node = document.getElementById("element-group");
+    //
+    //     const clone = node.cloneNode(true);
+    //
+    //     document.getElementById("content-group").appendChild(clone);
+    // }
+    // function getElementsGroup(){
+    //     const hElements = document.getElementsByClassName("h-input");
+    //     const xElements = document.getElementsByClassName("x-input");
+    //     for (const element of hElements) {
+    //         console.log(element.value);
+    //         calculateResult( );
+    //     }
+    //
+    // }
     function calculateResult() {
-        const {value} = document.getElementById('function-x');
-        // const {value: x} = document.getElementById('derivate-x');
-        console.log(value);
+        const {value: derivative} = document.getElementById('function');
+        const {value: x} = document.getElementById('derivative-x');
+        const {value: h} = document.getElementById('derivative-h1');
 
-        const parsedFunctionX = math.parse(value);
+
+        const parsedFunctionX = math.parse(derivative);
         const simplifiedFunctionX = math.simplify(parsedFunctionX);
-        // const parsedX = math.parse(x);
+        const parsedX = math.parse(x);
         const derivation = math.derivative(simplifiedFunctionX, 'x')
-        // const solvedDerivation = derivation.evaluate({x});
-        console.log(derivation.toString())
+        const solvedDerivation = derivation.evaluate({x});
+        // console.log(derivation.toString())
 
-        const result = document.getElementById('result-derivate');
-        result.textContent = "Derivada: " + derivation.toString();
+        const derivativeExpression = document.getElementById('derivative-expression');
+        const derivativeSolved = document.getElementById('derivative-solved');
+        const resultFormulaDiv = document.getElementById('resultFormula');
+        const xhi = document.getElementById('xhi');
+        const xhiSolved = parseFloat(h) + parseFloat(x);
+        derivativeExpression.textContent = "Derivada: " + derivation.toString();
+        derivativeSolved.textContent = "Derivada sustituida: " + derivation.evaluate({x});
+        xhi.textContent = "Xi+1: " + xhiSolved;
+        let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
+        let derivativeByH = parsedFunctionX.evaluate({x});
+        let resultFormula = (derivativeByXhi - derivativeByH) / h;
+        resultFormulaDiv.textContent = "Resultado: " + resultFormula.toString();
+
     }
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </html>
