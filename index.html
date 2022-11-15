@@ -33,48 +33,30 @@
                     <input type="number" class="col my-4 form-control form-control-lg " id="derivative-h1"
                            placeholder="rango min de h" autocomplete="off">
 
-                    <!--                        <input type="number" class="col my-4 m-1 form-control form-control-lg " id="derivate-h2"-->
-                    <!--                               placeholder="rango max de h" autocomplete="off">-->
-                    <!--                    </div>-->
+
                     <input type="number" class=" my-4  form-control form-control-lg " id="derivative-x"
                            placeholder="Introduce la derivada x" autocomplete="off">
+
+
                     <input type="text" class=" my-4  form-control form-control-lg " id="function"
                            placeholder="Introduce la función aquí" autocomplete="off">
+
+
                     <div class="fw-bolder " id="derivative-expression"></div>
+
                     <div class="fw-bolder " id="derivative-solved"></div>
+
                     <div class="fw-bolder" id="xhi"></div>
-                    <!--                    <div class="table-responsive">-->
-                    <!--                        <table class="   table table-borderless ">-->
-                    <!--                            <thead>-->
-                    <!--                            <tr>-->
-                    <!--                                <th scope="col">H</th>-->
-                    <!--                                <th scope="col">X</th>-->
-                    <!--                                <th scope="col">Resultado</th>-->
-
-                    <!--                            </tr>-->
-                    <!--                            </thead>-->
-                    <!--                            <tbody id="content-group">-->
-                    <!--                            <tr id="element-group" >-->
-                    <!--                                <th scope="row">-->
-                    <!--                                    <input class="form-control h-input" type="number">-->
-                    <!--                                </th>-->
-                    <!--                                <td>-->
-                    <!--                                    <input class="form-control x-input" type="number"></td>-->
-                    <!--                                <td>-->
-                    <!--                                     <h4  class="output-1">0.8</h4>-->
-                    <!--                                </td>-->
-                    <!--                                <td>-->
-                    <!--                                    <button type="button" class="btn btn-success" onclick="addInput()">Añadir</button>-->
-
-                    <!--                                </td>-->
-
-                    <!--                            </tr>-->
-
-                    <!--                            </tbody>-->
-                    <!--                        </table>-->
-                    <!--                    </div>-->
 
                     <div class="fw-bolder h5" id="resultFormula"></div>
+
+                    <div class="fw-bolder h5" id="xhiSolvedR"></div>
+
+
+                    <div class="fw-bolder h5" id="resultFormula2"></div>
+
+
+
                     <button type="button" class=" btn btn-primary my-3 text-center "
                             onclick="calculateResult()">Calcular
                     </button>
@@ -112,6 +94,7 @@
         const {value: h} = document.getElementById('derivative-h1');
 
 
+        //Diferencias progresivas
         const parsedFunctionX = math.parse(derivative);
         const simplifiedFunctionX = math.simplify(parsedFunctionX);
         const parsedX = math.parse(x);
@@ -119,18 +102,49 @@
         const solvedDerivation = derivation.evaluate({x});
         // console.log(derivation.toString())
 
+
+        const xhiSolved = parseFloat(h) + parseFloat(x);
+
+
+        const xhiSolvedR = parseFloat(x) - parseFloat(h);
+
+
+
+
+        let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
+        let derivativeByH = parsedFunctionX.evaluate({x});
+        let resultFormula = (derivativeByXhi - derivativeByH) / h;
+
+        let resultFormula2 = (derivativeByXhi - (derivativeByXhi2)) / h;
+
+        let derivativeByXhi2 = parsedFunctionX.evaluate({x: xhiSolvedR});
+
+
+        //Valor de los input
+
         const derivativeExpression = document.getElementById('derivative-expression');
         const derivativeSolved = document.getElementById('derivative-solved');
         const resultFormulaDiv = document.getElementById('resultFormula');
         const xhi = document.getElementById('xhi');
-        const xhiSolved = parseFloat(h) + parseFloat(x);
+
+
+        const resultFormulaDiv2 = document.getElementById('xhiSolvedR');
+
+        //Diferencias regresivas
+        //OutPut: Los resultados que se muestran en pantalla
+        
         derivativeExpression.textContent = "Derivada: " + derivation.toString();
         derivativeSolved.textContent = "Derivada sustituida: " + derivation.evaluate({x});
         xhi.textContent = "Xi+1: " + xhiSolved;
-        let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
-        let derivativeByH = parsedFunctionX.evaluate({x});
-        let resultFormula = (derivativeByXhi - derivativeByH) / h;
-        resultFormulaDiv.textContent = "Resultado: " + resultFormula.toString();
+        resultFormulaDiv.textContent = "Diferencias progresivas: " + resultFormula.toString();
+
+
+
+         resultFormulaDiv2.textContent = "Ress: " + derivativeByXhi2.toString();
+
+
+     
+       
 
     }
 
