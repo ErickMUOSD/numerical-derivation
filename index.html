@@ -28,17 +28,24 @@
                 <h1 class="h1">Derivación númerica</h1>
                 <h1 class="h1 my-1 text-center"></h1>
                 <div class=" justify-content-start ">
-                    <!--                    <div class="row">-->
+                    <label class="form-label">Rango de h</label>
+                    <div class="row mb-2">
 
-                    <input type="number" class="col my-4 form-control form-control-lg " id="derivative-h1"
-                           placeholder="rango min de h" autocomplete="off">
+                        <input type="number" class="col  form-control form-control-lg mx-2 " id="derivative-h1"
+                               placeholder="rango min de h0" autocomplete="off">
+                        <input type="number" class="col  form-control form-control-lg mx-2 " id="derivative-h2"
+                               placeholder="rango max de h1" autocomplete="off">
+                    </div>
+                    <label class="form-label">Rango de x</label>
+                    <div class="row mb-2">
 
-
-                    <input type="number" class=" my-4  form-control form-control-lg " id="derivative-x"
-                           placeholder="Introduce la derivada x" autocomplete="off">
-
-
-                    <input type="text" class=" my-4  form-control form-control-lg " id="function"
+                        <input type="number" class="col  form-control form-control-lg  mx-2  " id="derivative-x1"
+                               placeholder="Introduce la derivada x0" autocomplete="off">
+                        <input type="number" class="col   form-control form-control-lg  mx-2  " id="derivative-x2"
+                               placeholder="Introduce la derivada x1" autocomplete="off">
+                    </div>
+                    <label class="form-label">Función de x</label>
+                    <input type="text" class="  form-control form-control-lg " id="function"
                            placeholder="Introduce la función aquí" autocomplete="off">
 
 
@@ -54,12 +61,27 @@
                     <div class="fw-bolder h5" id="resultFormula2"></div>
                     <div class="fw-bolder h5" id="resultFormula3"></div>
 
-
-
                     <button type="button" class=" btn btn-primary my-3 text-center "
-                            onclick="calculateResult()">Calcular
+                            onclick="calculateData()">Intervals
                     </button>
+                    <!--                    <button type="button" class=" btn btn-primary my-3 text-center "-->
+                    <!--                            onclick="calculateResult()">Calcular-->
+                    <!--                    </button>-->
+                    <table class="table" id="table-b">
+                        <thead>
+                        <tr>
+                            <th scope="col">X</th>
+                            <th scope="col">H</th>
+                            <th scope="col">F. progresiva</th>
+                            <th scope="col">F. regresiva</th>
+                            <th scope="col">F. centrada</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
 
+
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
@@ -87,6 +109,107 @@
     //     }
     //
     // }
+    function calculateData() {
+        const {value: x1} = document.getElementById('derivative-x1');
+        const {value: x2} = document.getElementById('derivative-x2');
+        const {value: h1} = document.getElementById('derivative-h1');
+        const {value: h2} = document.getElementById('derivative-h2');
+
+        const listX = getRange(x1, x2)._data;
+        const listH = getRange(h1, h2)._data;
+
+        if (listX.length === 1 || listH.length === 1) {
+            alert("Los rangos de h y x no pueden estar vacios");
+            throw new Error("Stopping the function!");
+        }
+        if (listX.length !== listH.length) {
+            alert("Los rangos de h y x no son iguales");
+            throw new Error("Stopping the function!");
+        }
+        //merge arrays
+        const listXH = [];
+        for (var i = 0; i < listX.length; i++) {
+            const x = listX[i];
+            const h = listH[i]
+            const obj = {x, h}
+            listXH.push(obj)
+        }
+        // console.log(listXH);
+
+        const listXHResult = listXH.map((obj) => {
+            const {x, h} = obj;
+            return {
+                x,
+                h,
+                progressiveResult: calculateProgressiveFUnction(x, h),
+                regressiveResult: calculateRegressiveFunction(x, h),
+                centeredFunction: calculateCenteredFunction(x, h)
+            };
+        })
+        console.log(listXHResult)
+        displayData(listXHResult);
+
+    }
+
+    function displayData(listXHResult) {
+
+        listXHResult.forEach(function (element) {
+            var table = document.getElementById('table-b');
+
+            var row = table.insertRow();
+
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            cell1.innerHTML =  element.x.toFixed(2);
+            cell2.innerHTML =  element.h.toFixed(2);
+            cell3.innerHTML =  element.progressiveResult.toFixed(2);
+            cell4.innerHTML =  element.regressiveResult.toFixed(2);
+            cell5.innerHTML =  element.centeredFunction.toFixed(2);
+        });
+
+
+    }
+
+    function getRange(start, end) {
+        return math.range(start, end, 0.1, true);
+    }
+
+    function calculateProgressiveFUnction(x, h,) {
+        const {value: derivative} = document.getElementById('function');
+        // const {value: x} = document.getElementById('derivative-x');
+        // const {value: h} = document.getElementById('derivative-h1');
+        const parsedFunctionX = math.parse(derivative);
+        const xhiSolved = parseFloat(h) + parseFloat(x);
+        let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
+        let derivativeByH = parsedFunctionX.evaluate({x});
+        return (derivativeByXhi - derivativeByH) / h;
+
+
+    }
+
+    function calculateRegressiveFunction(x, h) {
+        const {value: derivative} = document.getElementById('function');
+
+        const parsedFunctionX = math.parse(derivative);
+        const xhiSolvedR = parseFloat(x) - parseFloat(h);
+        let derivativeByH = parsedFunctionX.evaluate({x});
+        let derivativeByXhi2 = parsedFunctionX.evaluate({x: xhiSolvedR});
+        return (derivativeByH - derivativeByXhi2) / h;
+    }
+
+    function calculateCenteredFunction(x, h) {
+        const {value: derivative} = document.getElementById('function');
+        const parsedFunctionX = math.parse(derivative);
+        const xhiSolved = parseFloat(h) + parseFloat(x);
+        const xhiSolvedR = parseFloat(x) - parseFloat(h);
+        let derivativeByXhi2 = parsedFunctionX.evaluate({x: xhiSolvedR});
+        let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
+        return (derivativeByXhi - derivativeByXhi2) / (2 * h)
+    }
+
     function calculateResult() {
         const {value: derivative} = document.getElementById('function');
         const {value: x} = document.getElementById('derivative-x');
@@ -104,25 +227,23 @@
 
         const xhiSolved = parseFloat(h) + parseFloat(x);
 
-        
+
         const xhiSolvedR = parseFloat(x) - parseFloat(h);
 
 
-
-
         let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
-        
+
         let derivativeByH = parsedFunctionX.evaluate({x});
         let resultFormula = (derivativeByXhi - derivativeByH) / h;
 
         let derivativeByXhi2 = parsedFunctionX.evaluate({x: xhiSolvedR});
 
 
-        let resultFormula2 = (derivativeByH-derivativeByXhi2)/h;
+        let resultFormula2 = (derivativeByH - derivativeByXhi2) / h;
 
 
         // let resultFormula3 = derivativeByXhi-derivativeByXhi2
-        let resultFormula3 = (derivativeByXhi-derivativeByXhi2)/(2*h)
+        let resultFormula3 = (derivativeByXhi - derivativeByXhi2) / (2 * h)
 
 
         //Valor de los input
@@ -130,10 +251,9 @@
         const derivativeExpression = document.getElementById('derivative-expression');
         const derivativeSolved = document.getElementById('derivative-solved');
         const resultFormulaDiv = document.getElementById('resultFormula');
-        
+
         const resultFormulaDiv3 = document.getElementById('resultFormula2');
         const resultFormulaDiv4 = document.getElementById('resultFormula3');
-
 
 
         const xhi = document.getElementById('xhi');
@@ -142,11 +262,9 @@
         const resultFormulaDiv2 = document.getElementById('xhiSolvedR');
 
 
-        
-
         //Diferencias regresivas
         //OutPut: Los resultados que se muestran en pantalla
-        
+
         derivativeExpression.textContent = "Derivada: " + derivation.toString();
         // derivativeSolved.textContent = "Derivada sustituida: " + derivation.evaluate({x});
         // xhi.textContent = "Xi+1: " + xhiSolved;
@@ -156,12 +274,10 @@
         //  resultFormulaDiv2.textContent = "Ress: " + derivativeByXhi2.toString();
 
 
-         resultFormulaDiv3.textContent = "Diferencias Regresivas: " + resultFormula2.toString();
+        resultFormulaDiv3.textContent = "Diferencias Regresivas: " + resultFormula2.toString();
 
-         resultFormulaDiv4.textContent = "Diferencias Centrales: " + resultFormula3.toString();
+        resultFormulaDiv4.textContent = "Diferencias Centrales: " + resultFormula3.toString();
 
-     
-       
 
     }
 
