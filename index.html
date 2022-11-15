@@ -52,6 +52,7 @@
 
                     <div class="fw-bolder h5" id="xhiSolvedR"></div>
                     <div class="fw-bolder h5" id="resultFormula2"></div>
+                    <div class="fw-bolder h5" id="resultFormula3"></div>
 
 
 
@@ -110,6 +111,7 @@
 
 
         let derivativeByXhi = parsedFunctionX.evaluate({x: xhiSolved});
+        
         let derivativeByH = parsedFunctionX.evaluate({x});
         let resultFormula = (derivativeByXhi - derivativeByH) / h;
 
@@ -119,6 +121,10 @@
         let resultFormula2 = (derivativeByH-derivativeByXhi2)/h;
 
 
+        // let resultFormula3 = derivativeByXhi-derivativeByXhi2
+        let resultFormula3 = (derivativeByXhi-derivativeByXhi2)/(2*h)
+
+
         //Valor de los input
 
         const derivativeExpression = document.getElementById('derivative-expression');
@@ -126,6 +132,7 @@
         const resultFormulaDiv = document.getElementById('resultFormula');
         
         const resultFormulaDiv3 = document.getElementById('resultFormula2');
+        const resultFormulaDiv4 = document.getElementById('resultFormula3');
 
 
 
@@ -143,13 +150,15 @@
         derivativeExpression.textContent = "Derivada: " + derivation.toString();
         // derivativeSolved.textContent = "Derivada sustituida: " + derivation.evaluate({x});
         // xhi.textContent = "Xi+1: " + xhiSolved;
-        resultFormulaDiv.textContent = "Diferencias progresivas: " + resultFormula.toString();
+        resultFormulaDiv.textContent = "Diferencias Progresivas: " + resultFormula.toString();
 
-        
+
         //  resultFormulaDiv2.textContent = "Ress: " + derivativeByXhi2.toString();
 
 
          resultFormulaDiv3.textContent = "Diferencias Regresivas: " + resultFormula2.toString();
+
+         resultFormulaDiv4.textContent = "Diferencias Centrales: " + resultFormula3.toString();
 
      
        
